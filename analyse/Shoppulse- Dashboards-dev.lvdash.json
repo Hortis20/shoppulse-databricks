@@ -1,0 +1,202 @@
+{
+  "datasets": [
+    {
+      "name": "fa4710b8",
+      "displayName": "Shoppulse Transaction Records Summary Dataset",
+      "queryLines": [
+        "\n",
+        "SELECT user_id,\n",
+        "       round(sum(chiffre_affaires), 2) AS ca_total,\n",
+        "       sum(nb_commandes)               AS nb_commandes\n",
+        "FROM shoppulse.dev.v_user_metrics\n",
+        "GROUP BY user_id\n",
+        "ORDER BY ca_total DESC\n",
+        "LIMIT 10;\n"
+      ]
+    },
+    {
+      "name": "4585e67a",
+      "displayName": "Retail Transactions Data Overview",
+      "queryLines": [
+        "\n",
+        "SELECT \n",
+        "annee_mois,\n",
+        "SUM(chiffre_affaires) AS total_ca\n",
+        "FROM shoppulse.dev.v_user_metrics\n",
+        "GROUP BY annee_mois\n",
+        "ORDER BY annee_mois \n"
+      ]
+    },
+    {
+      "name": "0ab60ea5",
+      "displayName": "shoppulse transaction insights dataset",
+      "queryLines": [
+        "\n",
+        "SELECT annee_mois,sum(nb_commandes) AS nb_commandes\n",
+        "FROM shoppulse.dev.v_user_metrics\n",
+        "group by annee_mois\n",
+        "ORDER BY annee_mois ASC"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "41a8fb01",
+      "displayName": "ALL",
+      "layout": [
+        {
+          "widget": {
+            "name": "7e202088",
+            "queries": [
+              {
+                "name": "715db9e7904e46558f8b2f759f19f859",
+                "query": {
+                  "datasetName": "fa4710b8",
+                  "fields": [
+                    {
+                      "name": "ca_total",
+                      "expression": "`ca_total`"
+                    },
+                    {
+                      "name": "nb_commandes",
+                      "expression": "`nb_commandes`"
+                    },
+                    {
+                      "name": "user_id",
+                      "expression": "`user_id`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "Top 10 customer",
+                "viz_type": "CHART",
+                "serialized_options": "{\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"series\":{\"column\":\"user_id\",\"id\":\"column_c524773724\"},\"x\":{\"column\":\"ca_total\",\"id\":\"column_c524773722\"},\"y\":[{\"column\":\"nb_commandes\",\"id\":\"column_c524773723\"}]},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"scatter\",\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{\"column_c524773723\":{\"name\":\"nb_commandes\",\"yAxis\":0}},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"type\":\"-\"}}",
+                "query_name": "715db9e7904e46558f8b2f759f19f859"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 10,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "f4ecaff7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "4585e67a",
+                  "fields": [
+                    {
+                      "name": "annee_mois",
+                      "expression": "`annee_mois`"
+                    },
+                    {
+                      "name": "sum(total_ca)",
+                      "expression": "SUM(`total_ca`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Evol CA",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "layout": "layer"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "annee_mois",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_ca)",
+                  "displayName": "total_ca",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 10,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "da049c6d",
+            "queries": [
+              {
+                "name": "715db9e7904e46558f8b2f759f19f859",
+                "query": {
+                  "datasetName": "0ab60ea5",
+                  "fields": [
+                    {
+                      "name": "column_c524773747",
+                      "expression": "DATE_TRUNC(\"MONTH\", `annee_mois`)"
+                    },
+                    {
+                      "name": "column_c524773749",
+                      "expression": "SUM(`nb_commandes`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "Evol nombre de transaction",
+                "viz_type": "CHART",
+                "serialized_options": "{\"isAggregationOn\":true,\"series\":{\"error_y\":{\"type\":\"data\",\"visible\":true},\"stacking\":null},\"coefficient\":1,\"yAxis\":[{\"type\":\"-\"},{\"opposite\":true,\"type\":\"-\"}],\"columnConfigurationMap\":{\"x\":{\"column\":\"annee_mois\",\"id\":\"column_c524773747\",\"transform\":\"MONTH_LEVEL\"},\"y\":[{\"column\":\"nb_commandes\",\"id\":\"column_c524773749\",\"transform\":\"SUM\"}]},\"alignYAxesAtZero\":true,\"direction\":{\"type\":\"counterclockwise\"},\"swappedAxes\":false,\"percentFormat\":\"0[.]00%\",\"textFormat\":\"\",\"legend\":{\"traceorder\":\"normal\"},\"globalSeriesType\":\"column\",\"numBins\":10,\"version\":2,\"sizemode\":\"diameter\",\"seriesOptions\":{\"column_c524773749\":{\"type\":\"column\",\"yAxis\":0}},\"error_y\":{\"type\":\"data\",\"visible\":true},\"sortX\":true,\"showDataLabels\":false,\"missingValuesAsZero\":true,\"useAggregationsUi\":true,\"numberFormat\":\"0,0.[00000]\",\"dateTimeFormat\":\"DD/MM/YYYY HH:mm\",\"sortY\":true,\"valuesOptions\":{},\"xAxis\":{\"labels\":{\"enabled\":true},\"type\":\"-\"}}",
+                "query_name": "715db9e7904e46558f8b2f759f19f859"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 10,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
